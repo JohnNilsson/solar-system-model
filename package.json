@@ -1,0 +1,21 @@
+{
+  "name": "solar-system-model",
+  "version": "1.0.0",
+  "description": "Helpers for constructing a solar system model",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnNilsson/solar-system-model.git"
+  },
+  "author": "John Nilsson <john@milsson.nu>",
+  "license": "0BSD",
+  "bugs": {
+    "url": "https://github.com/JohnNilsson/solar-system-model/issues"
+  },
+  "homepage": "https://github.com/JohnNilsson/solar-system-model#readme"
+}

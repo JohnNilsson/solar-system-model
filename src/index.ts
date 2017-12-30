@@ -14,7 +14,7 @@ function createMap() {
   return L.map(createMapElement());
 }
 
-const map = createMap().setView([51.505, -0.09], 13);
+const map = createMap();
 
 const mapBoxToken =
   "pk.eyJ1IjoiY3VyaW91c3NrZXB0aWMiLCJhIjoiY2pic2dyb3ZyMTZpdTMyczRnMGJ6cjRmYiJ9.CMEEUpBurx32zH3usKXJnQ";
@@ -28,3 +28,15 @@ L.tileLayer(
     accessToken: mapBoxToken
   }
 ).addTo(map);
+
+if ("geolocation" in navigator) {
+  navigator.geolocation.getCurrentPosition(
+    ({ coords }) => {
+      const center: L.LatLngTuple = [coords.latitude, coords.longitude];
+      map.setView(center, 17);
+      setSolarSystemPostition(center);
+    },
+    error => console.log(error),
+    { enableHighAccuracy: true }
+  );
+}

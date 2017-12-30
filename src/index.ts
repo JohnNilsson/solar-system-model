@@ -1,3 +1,4 @@
+import "./favicon.ico";
 import "leaflet/dist/leaflet.css";
 import "./index.css";
 import * as L from "leaflet";

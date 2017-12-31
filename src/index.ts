@@ -1,74 +1,41 @@
 import "./favicon.ico";
-import "leaflet/dist/leaflet.css";
 import "./index.css";
-import * as L from "leaflet";
-import * as mapbox from "./mapbox-tiles";
 import * as model from "./solar-system-model";
+import { SolarSystemMapElement } from "./SolarSystemMapElement";
+import {
+  ObjectSizesElement,
+  ObjectSizeChangedEvent
+} from "./ObjectSizesElement";
 
-function createMapElement() {
-  const map = document.createElement("div");
-  map.id = "map";
-  map.style.height = "100%";
-  return document.body.appendChild(map);
-}
+const map = new SolarSystemMapElement();
+map.id = "map";
+const sizes = new ObjectSizesElement();
+sizes.id = "sizes";
+document.body.appendChild(map);
+document.body.appendChild(sizes);
 
-function createOrbitalObjectLayer({
-  name,
-  objectRadius,
-  orbitRadius
-}: model.Orbit) {
-  const isSun = orbitRadius === 0;
-  if (isSun) {
-    return L.circle([0, 0], {
-      color: "yellow",
-      fillColor: "yellow",
-      fillOpacity: 0.8,
-      radius: objectRadius
-    });
-  } else {
-    return L.circle([0, 0], {
-      color: "white",
-      fillColor: "transparent",
-      weight: 2,
-      radius: orbitRadius
-    });
+const orbits = model.scaleBy("sun", 0.06);
+map.setOrbits(null, orbits);
+sizes.orbits = orbits;
+
+sizes.addEventListener(ObjectSizeChangedEvent, ev => {
+  console.log(ObjectSizeChangedEvent, ev);
+  const e = ev as CustomEvent;
+  const { object, size } = e.detail;
+  if (object && size > 0) {
+    const orbits = model.scaleBy(object, size);
+    console.log("orbits", orbits);
+    map.setOrbits(null, orbits);
+    sizes.orbits = orbits;
   }
-}
-function createSolarSystemLayer() {
-  const modelObjects = model.scaleBy("sun", 0.06);
-  console.log(modelObjects);
-  const objectLayers = modelObjects.map(createOrbitalObjectLayer);
-  return L.layerGroup(objectLayers);
-}
-
-function createMap() {
-  return L.map(createMapElement(), {
-    layers: [mapbox.satellite]
-  });
-}
-
-const ssl = createSolarSystemLayer();
-const map = createMap();
-map.addLayer(ssl);
-
-function setSolarSystemPostition(center: L.LatLngExpression) {
-  ssl.eachLayer(l => {
-    const c = l as L.Circle;
-    c.setLatLng(center);
-  });
-}
-
-map.on("click", e => {
-  const { latlng } = e as L.LeafletMouseEvent;
-  setSolarSystemPostition(latlng);
 });
 
 if ("geolocation" in navigator) {
   navigator.geolocation.getCurrentPosition(
     ({ coords }) => {
-      const center: L.LatLngTuple = [coords.latitude, coords.longitude];
-      map.setView(center, 17);
-      setSolarSystemPostition(center);
+      const center = [coords.latitude, coords.longitude] as [number, number];
+      map.setView(center, 16);
+      map.setOrbits(center, null);
     },
     error => console.log(error),
     { enableHighAccuracy: true }

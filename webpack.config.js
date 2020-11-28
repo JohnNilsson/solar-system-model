@@ -1,17 +1,19 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
-
-const outputDir = "dist";
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 let devtool = null;
 if (process.env.NODE_ENV !== "production") {
   devtool = "inline-source-map";
 }
 
+let mode = 'production';
+if (process.env.NODE_ENV !== "production") {
+  mode = 'development';
+}
+
 module.exports = {
   entry: "./src/index",
   devtool,
+  mode,
   module: {
     rules: [
       {
@@ -33,13 +35,8 @@ module.exports = {
     extensions: [".tsx", ".ts", ".js"]
   },
   plugins: [
-    new CleanWebpackPlugin([outputDir]),
     new HtmlWebpackPlugin({
       title: "Solar System Model"
     })
-  ],
-  output: {
-    filename: "[name].bundle.js",
-    path: path.resolve(__dirname, outputDir)
-  }
+  ]
 };

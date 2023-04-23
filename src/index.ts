@@ -1,4 +1,3 @@
-import "./favicon.ico";
 import "./index.css";
 import * as model from "./solar-system-model";
 import { SolarSystemMapElement } from "./SolarSystemMapElement";

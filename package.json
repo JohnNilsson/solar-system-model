@@ -4,12 +4,12 @@
   "description": "Helpers for constructing a solar system model",
   "main": "index.js",
   "dependencies": {
-    "leaflet": "^1.7.1"
+    "leaflet": "^1.9.3"
   },
   "devDependencies": {
-    "@types/leaflet": "^1.5.19",
+    "@types/leaflet": "^1.9.3",
     "esbuild": "^0.17.18",
-    "gh-pages": "^3.1.0",
+    "gh-pages": "^5.0.0"
   },
   "scripts": {
     "build": "esbuild src/index.ts --bundle --loader:.png=file --outdir=dist --minify --target=es2015 --format=esm",
